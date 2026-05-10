@@ -1,0 +1,43 @@
+plugin.tx_maijobs_list {
+    view {
+        templateRootPaths {
+            0 = EXT:mai_jobs/Resources/Private/Templates/
+            10 = {$plugin.tx_maijobs_list.view.templateRootPath}
+        }
+        partialRootPaths {
+            0 = EXT:mai_jobs/Resources/Private/Partials/
+            10 = {$plugin.tx_maijobs_list.view.partialRootPath}
+        }
+        layoutRootPaths {
+            0 = EXT:mai_jobs/Resources/Private/Layouts/
+            10 = {$plugin.tx_maijobs_list.view.layoutRootPath}
+        }
+    }
+    persistence {
+        storagePid = {$plugin.tx_maijobs_list.persistence.storagePid}
+    }
+    settings {
+        statusFilter =
+    }
+}
+
+plugin.tx_maijobs_detail {
+    view {
+        templateRootPaths {
+            0 = EXT:mai_jobs/Resources/Private/Templates/
+            10 = {$plugin.tx_maijobs_detail.view.templateRootPath}
+        }
+        partialRootPaths {
+            0 = EXT:mai_jobs/Resources/Private/Partials/
+            10 = {$plugin.tx_maijobs_detail.view.partialRootPath}
+        }
+        layoutRootPaths {
+            0 = EXT:mai_jobs/Resources/Private/Layouts/
+            10 = {$plugin.tx_maijobs_detail.view.layoutRootPath}
+        }
+    }
+    persistence {
+        storagePid = {$plugin.tx_maijobs_detail.persistence.storagePid}
+    }
+}
+

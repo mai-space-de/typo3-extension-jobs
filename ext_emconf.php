@@ -1,17 +1,19 @@
 <?php
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Mai Jobs',
-    'description' => 'Job listing records with title, description, requirements, location, and application deadline. Categories use TYPO3 sys_category.',
+    'description' => 'Jobs extension with job listings, category filtering, status management, and application form with file upload.',
     'category' => 'module',
     'author' => 'Maispace',
     'author_email' => '',
-    'state' => 'stable',
-    'version' => '1.0.0',
+    'state' => 'alpha',
+    'version' => '0.1.0',
     'constraints' => [
         'depends' => [
             'typo3' => '13.4.0-14.99.99',
         ],
         'conflicts' => [],
-        'suggests' => [],
+        'suggests' => [
+            'mai_mail' => '',
+        ],
     ],
 ];

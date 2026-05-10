@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="messages" date="2024-01-01T00:00:00Z" product-name="mai_jobs">
+        <header/>
+        <body>
+            <trans-unit id="job.apply">
+                <source>Apply Now</source>
+            </trans-unit>
+            <trans-unit id="job.deadline">
+                <source>Application Deadline</source>
+            </trans-unit>
+            <trans-unit id="job.status">
+                <source>Status</source>
+            </trans-unit>
+            <trans-unit id="job.status.open">
+                <source>Open</source>
+            </trans-unit>
+            <trans-unit id="job.status.filled">
+                <source>Filled</source>
+            </trans-unit>
+            <trans-unit id="job.status.closed">
+                <source>Closed</source>
+            </trans-unit>
+            <trans-unit id="job.all">
+                <source>All</source>
+            </trans-unit>
+            <trans-unit id="job.noResults">
+                <source>No vacancies found.</source>
+            </trans-unit>
+            <trans-unit id="application.form.title">
+                <source>Apply for this Position</source>
+            </trans-unit>
+            <trans-unit id="application.field.firstName">
+                <source>First Name</source>
+            </trans-unit>
+            <trans-unit id="application.field.lastName">
+                <source>Last Name</source>
+            </trans-unit>
+            <trans-unit id="application.field.email">
+                <source>Email Address</source>
+            </trans-unit>
+            <trans-unit id="application.field.message">
+                <source>Cover Letter</source>
+            </trans-unit>
+            <trans-unit id="application.field.cv">
+                <source>CV / Resume</source>
+            </trans-unit>
+            <trans-unit id="application.submit">
+                <source>Submit Application</source>
+            </trans-unit>
+            <trans-unit id="application.confirm.title">
+                <source>Application Received</source>
+            </trans-unit>
+            <trans-unit id="application.confirm.message">
+                <source>Thank you for your application. We will be in touch.</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

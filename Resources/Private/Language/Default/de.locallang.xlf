@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2024-01-01T00:00:00Z" product-name="mai_jobs">
+        <header/>
+        <body>
+            <trans-unit id="job.apply">
+                <source>Apply Now</source>
+                <target>Jetzt bewerben</target>
+            </trans-unit>
+            <trans-unit id="job.deadline">
+                <source>Application Deadline</source>
+                <target>Bewerbungsfrist</target>
+            </trans-unit>
+            <trans-unit id="job.status">
+                <source>Status</source>
+                <target>Status</target>
+            </trans-unit>
+            <trans-unit id="job.status.open">
+                <source>Open</source>
+                <target>Offen</target>
+            </trans-unit>
+            <trans-unit id="job.status.filled">
+                <source>Filled</source>
+                <target>Besetzt</target>
+            </trans-unit>
+            <trans-unit id="job.status.closed">
+                <source>Closed</source>
+                <target>Geschlossen</target>
+            </trans-unit>
+            <trans-unit id="job.all">
+                <source>All</source>
+                <target>Alle</target>
+            </trans-unit>
+            <trans-unit id="job.noResults">
+                <source>No vacancies found.</source>
+                <target>Keine Stellen gefunden.</target>
+            </trans-unit>
+            <trans-unit id="application.form.title">
+                <source>Apply for this Position</source>
+                <target>Auf diese Stelle bewerben</target>
+            </trans-unit>
+            <trans-unit id="application.field.firstName">
+                <source>First Name</source>
+                <target>Vorname</target>
+            </trans-unit>
+            <trans-unit id="application.field.lastName">
+                <source>Last Name</source>
+                <target>Nachname</target>
+            </trans-unit>
+            <trans-unit id="application.field.email">
+                <source>Email Address</source>
+                <target>E-Mail-Adresse</target>
+            </trans-unit>
+            <trans-unit id="application.field.message">
+                <source>Cover Letter</source>
+                <target>Anschreiben</target>
+            </trans-unit>
+            <trans-unit id="application.field.cv">
+                <source>CV / Resume</source>
+                <target>Lebenslauf</target>
+            </trans-unit>
+            <trans-unit id="application.submit">
+                <source>Submit Application</source>
+                <target>Bewerbung absenden</target>
+            </trans-unit>
+            <trans-unit id="application.confirm.title">
+                <source>Application Received</source>
+                <target>Bewerbung eingegangen</target>
+            </trans-unit>
+            <trans-unit id="application.confirm.message">
+                <source>Thank you for your application. We will be in touch.</source>
+                <target>Vielen Dank für Ihre Bewerbung. Wir werden uns bei Ihnen melden.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

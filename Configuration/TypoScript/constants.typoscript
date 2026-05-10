@@ -1,0 +1,21 @@
+plugin.tx_maijobs_list {
+    view {
+        templateRootPath =
+        partialRootPath =
+        layoutRootPath =
+    }
+    persistence {
+        storagePid =
+    }
+}
+
+plugin.tx_maijobs_detail {
+    view {
+        templateRootPath =
+        partialRootPath =
+        layoutRootPath =
+    }
+    persistence {
+        storagePid =
+    }
+}

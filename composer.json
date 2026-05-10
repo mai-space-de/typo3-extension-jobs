@@ -1,6 +1,6 @@
 {
     "name": "maispace/mai-jobs",
-    "description": "Job listing records with title, description, requirements, location, and application deadline. Categories use TYPO3 sys_category.",
+    "description": "Jobs extension with job listings, category filtering, status management, and application form with file upload.",
     "type": "typo3-cms-extension",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -9,6 +9,15 @@
             "role": "Developer"
         }
     ],
+    "require": {
+        "maispace/mai-base": "@dev",
+        "typo3/cms-core": "^14.1",
+        "typo3/cms-extbase": "^14.1",
+        "typo3/cms-fluid": "^14.1"
+    },
+    "suggest": {
+        "maispace/mai-mail": "Required for email notifications on application submission."
+    },
     "autoload": {
         "psr-4": {
             "Maispace\\MaiJobs\\": "Classes"

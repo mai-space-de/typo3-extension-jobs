@@ -1,0 +1,70 @@
+<html
+    data-namespace-typo3-fluid="true"
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+>
+<f:section name="main">
+    <div class="mai-jobs">
+        <f:if condition="{categories}">
+            <div class="mai-jobs__filters" role="tablist">
+                <button
+                    type="button"
+                    class="mai-jobs__filter mai-jobs__filter--active"
+                    role="tab"
+                    aria-selected="true"
+                    data-jobs-filter="all"
+                >
+                    <f:translate key="job.all" extensionName="mai_jobs"/>
+                </button>
+                <f:for each="{categories}" as="category">
+                    <button
+                        type="button"
+                        class="mai-jobs__filter"
+                        role="tab"
+                        aria-selected="false"
+                        data-jobs-filter="{category.uid}"
+                    >
+                        {category.title}
+                    </button>
+                </f:for>
+            </div>
+        </f:if>
+
+        <div class="mai-jobs__list">
+            <f:if condition="{jobs}">
+                <f:then>
+                    <f:for each="{jobs}" as="job">
+                        <article
+                            class="mai-jobs__item mai-jobs__item--{job.status}"
+                            data-jobs-item="1"
+                            data-jobs-categories="{f:for(each: job.categories, as: 'cat', iteration: 'i')}{cat.uid}{f:if(condition: i.isLast, else: ',')}{/f:for}"
+                        >
+                            <h3 class="mai-jobs__title">{job.title}</h3>
+                            <div class="mai-jobs__meta">
+                                <span class="mai-jobs__status mai-jobs__status--{job.status}">
+                                    <f:translate key="job.status.{job.status}" extensionName="mai_jobs"/>
+                                </span>
+                                <f:if condition="{job.deadline}">
+                                    <span class="mai-jobs__deadline">
+                                        <f:translate key="job.deadline" extensionName="mai_jobs"/>:
+                                        <f:format.date format="d.m.Y">{job.deadline}</f:format.date>
+                                    </span>
+                                </f:if>
+                            </div>
+                            <f:if condition="{settings.detailPid}">
+                                <f:link.page pageUid="{settings.detailPid}" additionalParams="{tx_maijobs_detail: {job: job.uid}}" class="mai-jobs__link">
+                                    <f:translate key="job.apply" extensionName="mai_jobs"/>
+                                </f:link.page>
+                            </f:if>
+                        </article>
+                    </f:for>
+                </f:then>
+                <f:else>
+                    <p class="mai-jobs__empty">
+                        <f:translate key="job.noResults" extensionName="mai_jobs"/>
+                    </p>
+                </f:else>
+            </f:if>
+        </div>
+    </div>
+</f:section>
+</html>

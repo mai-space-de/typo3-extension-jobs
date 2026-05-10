@@ -1,0 +1,77 @@
+<html
+    data-namespace-typo3-fluid="true"
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+>
+<f:section name="main">
+    <div class="mai-jobs-detail">
+        <h2 class="mai-jobs-detail__title">{job.title}</h2>
+        <div class="mai-jobs-detail__meta">
+            <span class="mai-jobs-detail__status mai-jobs-detail__status--{job.status}">
+                <f:translate key="job.status.{job.status}" extensionName="mai_jobs"/>
+            </span>
+            <f:if condition="{job.deadline}">
+                <span class="mai-jobs-detail__deadline">
+                    <f:translate key="job.deadline" extensionName="mai_jobs"/>:
+                    <f:format.date format="d.m.Y">{job.deadline}</f:format.date>
+                </span>
+            </f:if>
+        </div>
+
+        <f:if condition="{job.description}">
+            <div class="mai-jobs-detail__description">
+                <f:format.html>{job.description}</f:format.html>
+            </div>
+        </f:if>
+
+        <f:if condition="{job.requirements}">
+            <div class="mai-jobs-detail__requirements">
+                <f:format.html>{job.requirements}</f:format.html>
+            </div>
+        </f:if>
+
+        <f:if condition="{job.isOpen}">
+            <div class="mai-jobs-detail__apply">
+                <f:render section="ApplicationForm" arguments="{_all}"/>
+            </div>
+        </f:if>
+    </div>
+</f:section>
+
+<f:section name="ApplicationForm">
+    <f:form action="apply" controller="Application" objectName="application" object="{application}" method="post">
+        <f:form.hidden name="job" value="{job.uid}"/>
+        <h3 class="mai-jobs-apply__title">
+            <f:translate key="application.form.title" extensionName="mai_jobs"/>
+        </h3>
+        <div class="mai-jobs-apply__fields">
+            <div class="mai-jobs-apply__field">
+                <f:form.label for="firstName">
+                    <f:translate key="application.field.firstName" extensionName="mai_jobs"/>
+                </f:form.label>
+                <f:form.textfield id="firstName" property="firstName" required="required" class="mai-jobs-apply__input"/>
+            </div>
+            <div class="mai-jobs-apply__field">
+                <f:form.label for="lastName">
+                    <f:translate key="application.field.lastName" extensionName="mai_jobs"/>
+                </f:form.label>
+                <f:form.textfield id="lastName" property="lastName" required="required" class="mai-jobs-apply__input"/>
+            </div>
+            <div class="mai-jobs-apply__field">
+                <f:form.label for="email">
+                    <f:translate key="application.field.email" extensionName="mai_jobs"/>
+                </f:form.label>
+                <f:form.textfield id="email" property="email" type="email" required="required" class="mai-jobs-apply__input"/>
+            </div>
+            <div class="mai-jobs-apply__field">
+                <f:form.label for="message">
+                    <f:translate key="application.field.message" extensionName="mai_jobs"/>
+                </f:form.label>
+                <f:form.textarea id="message" property="message" rows="8" class="mai-jobs-apply__textarea"/>
+            </div>
+        </div>
+        <div class="mai-jobs-apply__submit">
+            <f:form.submit value="{f:translate(key: 'application.submit', extensionName: 'mai_jobs')}" class="mai-jobs-apply__button"/>
+        </div>
+    </f:form>
+</f:section>
+</html>
