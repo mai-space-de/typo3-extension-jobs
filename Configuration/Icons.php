@@ -9,10 +9,10 @@ return [
     ],
     'tx-maijobs-job' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-        'source' => 'EXT:mai_jobs/Resources/Public/Icons/tx_maijobs_job.svg',
+        'source' => 'EXT:mai_base/Resources/Public/Icons/generic_table.svg',
     ],
     'tx-maijobs-application' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-        'source' => 'EXT:mai_jobs/Resources/Public/Icons/tx_maijobs_application.svg',
+        'source' => 'EXT:mai_base/Resources/Public/Icons/generic_table.svg',
     ],
 ];

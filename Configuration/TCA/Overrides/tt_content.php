@@ -13,7 +13,7 @@ $lang = Helper::localLangHelperFactory('mai_jobs', 'Default/locallang_tca.xlf');
     'MaiJobs',
     'List',
     $lang('plugin.list.title'),
-    'ext-maispace-mai_jobs',
+    'mai-content',
     'maispace_feature',
 );
 
@@ -21,11 +21,11 @@ $lang = Helper::localLangHelperFactory('mai_jobs', 'Default/locallang_tca.xlf');
     'MaiJobs',
     'Detail',
     $lang('plugin.detail.title'),
-    'ext-maispace-mai_jobs',
+    'mai-content',
     'maispace_feature',
 );
 
-(new CType('maispace_jobs_list', $lang('ctype.jobs_list'), 'ext-maispace-mai_jobs'))
+(new CType('maispace_jobs_list', $lang('ctype.jobs_list'), 'mai-content'))
     ->addDefaultHeaderPalette()
     ->addCustomFields('pi_flexform')
     ->addDefaultLanguageTab()
@@ -33,7 +33,7 @@ $lang = Helper::localLangHelperFactory('mai_jobs', 'Default/locallang_tca.xlf');
     ->setGroup('maispace_feature')
     ->register();
 
-(new CType('maispace_jobs_detail', $lang('ctype.jobs_detail'), 'ext-maispace-mai_jobs'))
+(new CType('maispace_jobs_detail', $lang('ctype.jobs_detail'), 'mai-content'))
     ->addDefaultHeaderPalette()
     ->addDefaultLanguageTab()
     ->addDefaultAccessTab()
