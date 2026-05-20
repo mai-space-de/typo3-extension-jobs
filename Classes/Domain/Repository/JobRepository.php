@@ -19,7 +19,7 @@ class JobRepository extends Repository
     {
         $query = $this->createQuery();
         $query->matching(
-            $query->equals('status', $status)
+            $query->equals('status', $status),
         );
 
         return $query->execute();
@@ -29,7 +29,7 @@ class JobRepository extends Repository
     {
         $query = $this->createQuery();
         $query->matching(
-            $query->contains('categories', $categoryUid)
+            $query->contains('categories', $categoryUid),
         );
 
         return $query->execute();
@@ -48,7 +48,7 @@ class JobRepository extends Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setStoragePageIds($pageUids);
         $query->matching(
-            $query->equals('status', $status)
+            $query->equals('status', $status),
         );
 
         return $query->execute();
@@ -59,7 +59,7 @@ class JobRepository extends Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setStoragePageIds($pageUids);
         $query->matching(
-            $query->contains('categories', $categoryUid)
+            $query->contains('categories', $categoryUid),
         );
 
         return $query->execute();
@@ -73,7 +73,7 @@ class JobRepository extends Repository
             $query->logicalAnd(
                 $query->contains('categories', $categoryUid),
                 $query->equals('status', $status),
-            )
+            ),
         );
 
         return $query->execute();

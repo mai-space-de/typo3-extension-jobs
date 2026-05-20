@@ -1,21 +1,29 @@
-plugin.tx_maijobs_list {
-    view {
-        templateRootPath =
-        partialRootPath =
-        layoutRootPath =
+plugin {
+    tx_maijobs {
+        view {
+            templateRootPath = EXT:mai_jobs/Resources/Private/Templates/
+            partialRootPath = EXT:mai_jobs/Resources/Private/Partials/
+            layoutRootPath = EXT:mai_jobs/Resources/Private/Layouts/
+        }
     }
-    persistence {
-        storagePid =
+    tx_maijobs_list {
+        view {
+            templateRootPath =
+            partialRootPath =
+            layoutRootPath =
+        }
+        persistence {
+            storagePid =
+        }
     }
-}
-
-plugin.tx_maijobs_detail {
-    view {
-        templateRootPath =
-        partialRootPath =
-        layoutRootPath =
-    }
-    persistence {
-        storagePid =
+    tx_maijobs_detail {
+        view {
+            templateRootPath =
+            partialRootPath =
+            layoutRootPath =
+        }
+        persistence {
+            storagePid =
+        }
     }
 }

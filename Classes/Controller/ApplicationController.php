@@ -16,8 +16,7 @@ class ApplicationController extends AbstractActionController
     public function __construct(
         private readonly ApplicationRepository $applicationRepository,
         private readonly Context $context,
-    ) {
-    }
+    ) {}
 
     public function applyAction(Job $job, ?Application $application = null): ResponseInterface
     {
@@ -37,7 +36,7 @@ class ApplicationController extends AbstractActionController
     public function confirmAction(Job $job, Application $application): ResponseInterface
     {
         $application->setJob($job);
-        $application->setSubmittedAt((int)$this->context->getPropertyFromAspect('date', 'timestamp'));
+        $application->setSubmittedAt((int) $this->context->getPropertyFromAspect('date', 'timestamp'));
 
         $this->applicationRepository->add($application);
 

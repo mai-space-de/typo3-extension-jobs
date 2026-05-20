@@ -23,8 +23,7 @@ class JobController extends AbstractActionController
     public function __construct(
         private readonly JobRepository $jobRepository,
         private readonly ConnectionPool $connectionPool,
-    ) {
-    }
+    ) {}
 
     public function injectPageRenderer(PageRenderer $pageRenderer): void
     {
@@ -41,8 +40,8 @@ class JobController extends AbstractActionController
         $settings = $this->getSettings();
 
         $pageUids = $this->resolveStoragePageUids();
-        $categoryUid = (int)($settings['categoryUid'] ?? 0);
-        $statusFilter = (string)($settings['statusFilter'] ?? '');
+        $categoryUid = (int) ($settings['categoryUid'] ?? 0);
+        $statusFilter = (string) ($settings['statusFilter'] ?? '');
 
         if ($pageUids !== [] && $categoryUid > 0 && $statusFilter !== '') {
             $jobs = $this->jobRepository->findFromPagesByCategoryAndStatus($pageUids, $categoryUid, $statusFilter);
@@ -91,7 +90,7 @@ class JobController extends AbstractActionController
         }
 
         return array_filter(
-            array_map('intval', explode(',', (string)$pages)),
+            array_map('intval', explode(',', (string) $pages)),
             static fn(int $uid): bool => $uid > 0,
         );
     }
@@ -104,7 +103,7 @@ class JobController extends AbstractActionController
         }
 
         $uids = array_filter(
-            array_map('intval', explode(',', (string)$categoryUids)),
+            array_map('intval', explode(',', (string) $categoryUids)),
             static fn(int $uid): bool => $uid > 0,
         );
 

@@ -18,7 +18,7 @@ class ApplicationRepository extends Repository
     {
         $query = $this->createQuery();
         $query->matching(
-            $query->equals('job', $jobUid)
+            $query->equals('job', $jobUid),
         );
 
         return $query->execute();
@@ -31,7 +31,7 @@ class ApplicationRepository extends Repository
             $query->logicalAnd(
                 $query->equals('job', $jobUid),
                 $query->equals('status', $status),
-            )
+            ),
         );
 
         return $query->execute();
