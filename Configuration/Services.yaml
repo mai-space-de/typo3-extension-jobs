@@ -7,3 +7,8 @@ services:
   Maispace\MaiJobs\:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
+
+  Maispace\MaiJobs\Indexer\JobsIndexer:
+    tags:
+      - name: 'maispace.search.indexer'
+      - name: 'maispace.search.result_formatter'
