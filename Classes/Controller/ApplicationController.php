@@ -8,8 +8,12 @@ use Maispace\MaiBase\Controller\AbstractActionController;
 use Maispace\MaiJobs\Domain\Model\Application;
 use Maispace\MaiJobs\Domain\Model\Job;
 use Maispace\MaiJobs\Domain\Repository\ApplicationRepository;
+use Maispace\MaiJobs\Validation\Validator\MimeTypeValidator;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
+use TYPO3\CMS\Extbase\Validation\Validator\ConjunctionValidator;
 
 class ApplicationController extends AbstractActionController
 {
@@ -18,6 +22,14 @@ class ApplicationController extends AbstractActionController
         private readonly Context $context,
     ) {}
 
+    protected function initializeConfirmAction(): void
+    {
+        /** @var ConjunctionValidator $validator */
+        $validator = $this->arguments['application']->getValidator();
+        $validator->addValidator(GeneralUtility::makeInstance(MimeTypeValidator::class));
+    }
+
+    #[IgnoreValidation(['argumentName' => 'application'])]
     public function applyAction(Job $job, ?Application $application = null): ResponseInterface
     {
         if ($application === null) {
