@@ -71,6 +71,18 @@
                 <source>Thank you for your application. We will be in touch.</source>
                 <target>Vielen Dank für Ihre Bewerbung. Wir werden uns bei Ihnen melden.</target>
             </trans-unit>
+            <trans-unit id="application.field.cv.hint">
+                <source>Allowed file types: PDF, DOC, DOCX, ODT</source>
+                <target>Erlaubte Dateitypen: PDF, DOC, DOCX, ODT</target>
+            </trans-unit>
+            <trans-unit id="validation.error.mimeType.invalid">
+                <source>The uploaded file is invalid.</source>
+                <target>Die hochgeladene Datei ist ungültig.</target>
+            </trans-unit>
+            <trans-unit id="validation.error.mimeType.notAllowed">
+                <source>The file type &quot;{0}&quot; is not allowed. Only {1} files are accepted.</source>
+                <target>Der Dateityp &quot;{0}&quot; ist nicht erlaubt. Es werden nur {1}-Dateien akzeptiert.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

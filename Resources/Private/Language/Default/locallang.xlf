@@ -54,6 +54,15 @@
             <trans-unit id="application.confirm.message">
                 <source>Thank you for your application. We will be in touch.</source>
             </trans-unit>
+            <trans-unit id="application.field.cv.hint">
+                <source>Allowed file types: PDF, DOC, DOCX, ODT</source>
+            </trans-unit>
+            <trans-unit id="validation.error.mimeType.invalid">
+                <source>The uploaded file is invalid.</source>
+            </trans-unit>
+            <trans-unit id="validation.error.mimeType.notAllowed">
+                <source>The file type &quot;{0}&quot; is not allowed. Only {1} files are accepted.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

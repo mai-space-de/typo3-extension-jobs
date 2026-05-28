@@ -38,11 +38,23 @@
 </f:section>
 
 <f:section name="ApplicationForm">
-    <f:form action="apply" controller="Application" objectName="application" object="{application}" method="post">
+    <f:form action="confirm" controller="Application" objectName="application" object="{application}" method="post" enctype="multipart/form-data">
         <f:form.hidden name="job" value="{job.uid}"/>
         <h3 class="mai-jobs-apply__title">
             <f:translate key="application.form.title" extensionName="mai_jobs"/>
         </h3>
+        <f:flashMessages/>
+        <f:form.validationResults>
+            <f:if condition="{validationResults.flattenedErrors}">
+                <div class="mai-jobs-apply__errors">
+                    <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyName">
+                        <f:for each="{errors}" as="error">
+                            <p class="mai-jobs-apply__error">{error.message}</p>
+                        </f:for>
+                    </f:for>
+                </div>
+            </f:if>
+        </f:form.validationResults>
         <div class="mai-jobs-apply__fields">
             <div class="mai-jobs-apply__field">
                 <f:form.label for="firstName">
@@ -67,6 +79,13 @@
                     <f:translate key="application.field.message" extensionName="mai_jobs"/>
                 </f:form.label>
                 <f:form.textarea id="message" property="message" rows="8" class="mai-jobs-apply__textarea"/>
+            </div>
+            <div class="mai-jobs-apply__field">
+                <f:form.label for="cv">
+                    <f:translate key="application.field.cv" extensionName="mai_jobs"/>
+                </f:form.label>
+                <f:form.upload id="cv" property="cv" class="mai-jobs-apply__input"/>
+                <p class="mai-jobs-apply__hint"><f:translate key="application.field.cv.hint" extensionName="mai_jobs"/></p>
             </div>
         </div>
         <div class="mai-jobs-apply__submit">
