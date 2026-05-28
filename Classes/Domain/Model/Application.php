@@ -17,6 +17,9 @@ class Application extends AbstractEntity
 
     protected string $message = '';
 
+    /**
+     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>|null
+     */
     protected ?ObjectStorage $cv = null;
 
     protected string $status = 'pending';

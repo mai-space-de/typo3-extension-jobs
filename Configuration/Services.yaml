@@ -12,3 +12,10 @@ services:
     tags:
       - name: 'maispace.search.indexer'
       - name: 'maispace.search.result_formatter'
+
+  Maispace\MaiJobs\Property\TypeConverter\CvUploadTypeConverter:
+    tags:
+      - name: extbase.type_converter
+        priority: 10
+        target: TYPO3\CMS\Extbase\Domain\Model\FileReference
+        sources: TYPO3\CMS\Core\Http\UploadedFile, array
