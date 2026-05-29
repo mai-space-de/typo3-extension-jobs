@@ -14,25 +14,26 @@ use TYPO3\CMS\Core\Resource\FileReference as CoreFileReference;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Error\Error;
 
 final class CvUploadTypeConverterTest extends TestCase
 {
     private CvUploadTypeConverter $converter;
-    private ResourceStorage $resourceStorageMock;
     private ResourceFactory $resourceFactoryMock;
+    private StorageRepository $storageRepositoryMock;
     private Folder $folderMock;
 
     protected function setUp(): void
     {
-        $this->resourceStorageMock = $this->createMock(ResourceStorage::class);
         $this->resourceFactoryMock = $this->createMock(ResourceFactory::class);
+        $this->storageRepositoryMock = $this->createMock(StorageRepository::class);
         $this->folderMock = $this->createMock(Folder::class);
 
         $this->converter = new CvUploadTypeConverter();
         $this->converter->injectResourceFactory($this->resourceFactoryMock);
-        $this->converter->injectResourceStorage($this->resourceStorageMock);
+        $this->converter->injectStorageRepository($this->storageRepositoryMock);
     }
 
     private function createValidUploadInfo(string $mimeType = 'application/pdf'): array
@@ -53,11 +54,11 @@ final class CvUploadTypeConverterTest extends TestCase
 
         $coreFileReference = $this->createMock(CoreFileReference::class);
 
-        $this->resourceStorageMock
+        $resourceStorageMock = $this->createMock(ResourceStorage::class);
+        $resourceStorageMock
             ->method('getDefaultFolder')
             ->willReturn($this->folderMock);
-
-        $this->resourceStorageMock
+        $resourceStorageMock
             ->method('addFile')
             ->with(
                 $uploadInfo['tmp_name'],
@@ -66,6 +67,10 @@ final class CvUploadTypeConverterTest extends TestCase
                 DuplicationBehavior::RENAME,
             )
             ->willReturn($coreFile);
+
+        $this->storageRepositoryMock
+            ->method('getDefaultStorage')
+            ->willReturn($resourceStorageMock);
 
         $this->resourceFactoryMock
             ->method('createFileReferenceObject')
@@ -242,8 +247,10 @@ final class CvUploadTypeConverterTest extends TestCase
         $coreFile->method('getUid')->willReturn(456);
         $coreFileReference = $this->createMock(CoreFileReference::class);
 
-        $this->resourceStorageMock->method('getDefaultFolder')->willReturn($this->folderMock);
-        $this->resourceStorageMock->method('addFile')->willReturn($coreFile);
+        $resourceStorageMock = $this->createMock(ResourceStorage::class);
+        $resourceStorageMock->method('getDefaultFolder')->willReturn($this->folderMock);
+        $resourceStorageMock->method('addFile')->willReturn($coreFile);
+        $this->storageRepositoryMock->method('getDefaultStorage')->willReturn($resourceStorageMock);
         $this->resourceFactoryMock->method('createFileReferenceObject')->willReturn($coreFileReference);
 
         $result = $this->converter->convertFrom($uploadedFile, FileReference::class);
@@ -271,9 +278,11 @@ final class CvUploadTypeConverterTest extends TestCase
     {
         $uploadInfo = $this->createValidUploadInfo('application/pdf');
 
-        $this->resourceStorageMock->method('getDefaultFolder')->willReturn($this->folderMock);
-        $this->resourceStorageMock->method('addFile')
+        $resourceStorageMock = $this->createMock(ResourceStorage::class);
+        $resourceStorageMock->method('getDefaultFolder')->willReturn($this->folderMock);
+        $resourceStorageMock->method('addFile')
             ->willThrowException(new \RuntimeException('Storage failure'));
+        $this->storageRepositoryMock->method('getDefaultStorage')->willReturn($resourceStorageMock);
 
         $result = $this->converter->convertFrom($uploadInfo, FileReference::class);
         self::assertInstanceOf(Error::class, $result);
@@ -300,8 +309,10 @@ final class CvUploadTypeConverterTest extends TestCase
         $coreFile->method('getUid')->willReturn(789);
         $coreFileReference = $this->createMock(CoreFileReference::class);
 
-        $this->resourceStorageMock->method('getDefaultFolder')->willReturn($this->folderMock);
-        $this->resourceStorageMock->method('addFile')->willReturn($coreFile);
+        $resourceStorageMock = $this->createMock(ResourceStorage::class);
+        $resourceStorageMock->method('getDefaultFolder')->willReturn($this->folderMock);
+        $resourceStorageMock->method('addFile')->willReturn($coreFile);
+        $this->storageRepositoryMock->method('getDefaultStorage')->willReturn($resourceStorageMock);
         $this->resourceFactoryMock->method('createFileReferenceObject')->willReturn($coreFileReference);
 
         try {

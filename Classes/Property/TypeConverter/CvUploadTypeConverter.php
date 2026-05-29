@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Http\UploadedFile;
 use TYPO3\CMS\Core\Resource\Enum\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\File as CoreFile;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
@@ -40,16 +40,17 @@ class CvUploadTypeConverter extends AbstractTypeConverter
     private const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'odt'];
 
     protected ResourceFactory $resourceFactory;
-    protected ResourceStorage $resourceStorage;
+
+    protected StorageRepository $storageRepository;
 
     public function injectResourceFactory(ResourceFactory $resourceFactory): void
     {
         $this->resourceFactory = $resourceFactory;
     }
 
-    public function injectResourceStorage(ResourceStorage $resourceStorage): void
+    public function injectStorageRepository(StorageRepository $storageRepository): void
     {
-        $this->resourceStorage = $resourceStorage;
+        $this->storageRepository = $storageRepository;
     }
 
     /**
@@ -139,10 +140,11 @@ class CvUploadTypeConverter extends AbstractTypeConverter
 
     private function storeUploadedFile(array $uploadInfo): \TYPO3\CMS\Core\Resource\FileReference
     {
-        $targetFolder = $this->resourceStorage->getDefaultFolder();
+        $storage = $this->storageRepository->getDefaultStorage();
+        $targetFolder = $storage->getDefaultFolder();
 
         /** @var CoreFile $file */
-        $file = $this->resourceStorage->addFile(
+        $file = $storage->addFile(
             $uploadInfo['tmp_name'],
             $targetFolder,
             $uploadInfo['name'] ?? '',
