@@ -72,14 +72,37 @@ class JobController extends AbstractActionController
         return $this->htmlResponse();
     }
 
-    public function detailAction(Job $job): ResponseInterface
+    public function detailAction(?Job $job = null): ResponseInterface
     {
+        if ($job === null) {
+            $job = $this->resolveFallbackJob();
+        }
+
+        if ($job === null) {
+            return $this->htmlResponse('<p>No job found.</p>');
+        }
+
         $this->view->assignMultiple([
             'job' => $job,
             'settings' => $this->getSettings(),
         ]);
 
         return $this->htmlResponse();
+    }
+
+    private function resolveFallbackJob(): ?Job
+    {
+        $pageUids = $this->resolveStoragePageUids();
+
+        if ($pageUids !== []) {
+            $jobs = $this->jobRepository->findFromPages($pageUids);
+        } else {
+            $jobs = $this->jobRepository->findAll();
+        }
+
+        $firstJob = $jobs->getFirst();
+
+        return $firstJob instanceof Job ? $firstJob : null;
     }
 
     private function resolveStoragePageUids(): array
