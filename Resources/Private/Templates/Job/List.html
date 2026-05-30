@@ -5,27 +5,32 @@
 <f:section name="main">
     <div class="mai-jobs">
         <f:if condition="{categories}">
-            <div class="mai-jobs__filters" role="tablist">
-                <button
-                    type="button"
-                    class="mai-jobs__filter mai-jobs__filter--active"
-                    role="tab"
-                    aria-selected="true"
-                    data-jobs-filter="all"
-                >
-                    <f:translate key="job.all" extensionName="mai_jobs"/>
-                </button>
-                <f:for each="{categories}" as="category">
+            <div class="mai-jobs__filter-section">
+                <div class="mai-jobs__filter-messages" role="status" aria-live="polite" aria-atomic="true"></div>
+                <div class="mai-jobs__filters" role="tablist" aria-label="Filter jobs by category">
                     <button
                         type="button"
-                        class="mai-jobs__filter"
+                        class="mai-jobs__filter mai-jobs__filter--active"
                         role="tab"
-                        aria-selected="false"
-                        data-jobs-filter="{category.uid}"
+                        aria-selected="true"
+                        aria-label="{f:translate(key: 'job.all', extensionName: 'mai_jobs')}"
+                        data-jobs-filter="all"
                     >
-                        {category.title}
+                        <f:translate key="job.all" extensionName="mai_jobs"/>
                     </button>
-                </f:for>
+                    <f:for each="{categories}" as="category">
+                        <button
+                            type="button"
+                            class="mai-jobs__filter"
+                            role="tab"
+                            aria-selected="false"
+                            aria-label="{category.title}"
+                            data-jobs-filter="{category.uid}"
+                        >
+                            {category.title}
+                        </button>
+                    </f:for>
+                </div>
             </div>
         </f:if>
 
