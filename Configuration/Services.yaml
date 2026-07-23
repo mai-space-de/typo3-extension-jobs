@@ -8,6 +8,10 @@ services:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
 
+  # DataHandler instantiates hooks via GeneralUtility::makeInstance() — must be public for DI
+  Maispace\MaiJobs\Hook\JobCacheInvalidationHook:
+    public: true
+
   Maispace\MaiJobs\Indexer\JobsIndexer:
     tags:
       - name: 'maispace.search.indexer'

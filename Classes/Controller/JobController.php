@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class JobController extends AbstractActionController
 {
@@ -79,7 +80,8 @@ class JobController extends AbstractActionController
         }
 
         if ($job === null) {
-            return $this->htmlResponse('<p>No job found.</p>');
+            $message = LocalizationUtility::translate('job.notFound', 'mai_jobs') ?? 'Job not found.';
+            return $this->htmlResponse('<p class="mai-jobs__empty">' . htmlspecialchars($message) . '</p>');
         }
 
         $this->view->assignMultiple([
