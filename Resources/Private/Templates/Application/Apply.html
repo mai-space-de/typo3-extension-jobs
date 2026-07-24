@@ -11,7 +11,7 @@
         <f:flashMessages/>
         <f:form.validationResults>
             <f:if condition="{validationResults.flattenedErrors}">
-                <div class="mai-jobs-apply__errors">
+                <div class="mai-jobs-apply__errors" role="alert">
                     <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyName">
                         <f:for each="{errors}" as="error">
                             <p class="mai-jobs-apply__error">{error.message}</p>
