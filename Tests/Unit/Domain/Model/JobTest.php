@@ -102,6 +102,21 @@ final class JobTest extends TestCase
         self::assertSame('', $job->getTitle());
     }
 
+    #[Test]
+    public function defaultSlugIsEmptyString(): void
+    {
+        $job = new Job();
+        self::assertSame('', $job->getSlug());
+    }
+
+    #[Test]
+    public function setSlugStoresTheValue(): void
+    {
+        $job = new Job();
+        $job->setSlug('hausaufgabenbetreuung-m-w-d');
+        self::assertSame('hausaufgabenbetreuung-m-w-d', $job->getSlug());
+    }
+
     // ── description getter / setter ─────────────────────────────────────────
 
     #[Test]

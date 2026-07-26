@@ -6,6 +6,7 @@ use Maispace\MaiBase\TableConfigurationArray\FieldConfig\CategoryConfig;
 use Maispace\MaiBase\TableConfigurationArray\FieldConfig\DatetimeConfig;
 use Maispace\MaiBase\TableConfigurationArray\FieldConfig\InputConfig;
 use Maispace\MaiBase\TableConfigurationArray\FieldConfig\SelectSingleConfig;
+use Maispace\MaiBase\TableConfigurationArray\FieldConfig\SlugConfig;
 use Maispace\MaiBase\TableConfigurationArray\FieldConfig\TextConfig;
 use Maispace\MaiBase\TableConfigurationArray\Helper;
 use Maispace\MaiBase\TableConfigurationArray\Table;
@@ -22,6 +23,19 @@ return (new Table($lang('table.tx_maijobs_job')))
         'title',
         $lang('tx_maijobs_job.title'),
         (new InputConfig())->setSize(50)->setMax(255)->setEval('trim')->setRequired()
+    )
+    ->addColumn(
+        'slug',
+        $lang('tx_maijobs_job.slug'),
+        (new SlugConfig())
+            ->setEval('uniqueInSite')
+            ->setFallbackCharacter('-')
+            ->setPrependSlash(false)
+            ->setGeneratorOptions([
+                'fields' => ['title'],
+                'fieldSeparator' => '-',
+                'replacements' => ['/' => ''],
+            ])
     )
     ->addColumn(
         'description',
@@ -56,7 +70,7 @@ return (new Table($lang('table.tx_maijobs_job')))
     )
     ->addTypeShowItem(
         '0',
-        'title, description, requirements, deadline,
+        'title, slug, description, requirements, deadline,
         --div--;' . $lang('tab.meta') . ', status, categories,
         --div--;' . $lang('tab.language') . ', --palette--;;language,
         --div--;' . $lang('tab.access') . ', --palette--;;hidden, --palette--;;access'

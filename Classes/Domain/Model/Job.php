@@ -11,6 +11,8 @@ class Job extends AbstractEntity
 {
     protected string $title = '';
 
+    protected string $slug = '';
+
     protected string $description = '';
 
     protected string $requirements = '';
@@ -42,6 +44,16 @@ class Job extends AbstractEntity
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
     }
 
     public function getDescription(): string

@@ -12,6 +12,7 @@ Structured vacancy record stored in `tx_maijobs_job`.
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
 | `title` | `varchar(255)` | yes | Backend list label |
+| `slug` | `varchar(2048)` | no | Auto-generated from title; used by site route enhancer `MaiJobsDetail` |
 | `description` | `text` (RTE) | yes | Full job description; rich text |
 | `requirements` | `text` (RTE) | no | Skills / qualifications; rich text |
 | `deadline` | `int` (Unix timestamp) | no | Application deadline; `0` = no deadline |
@@ -350,6 +351,8 @@ The full JSON-LD block for an open job with a deadline looks like:
 - **Detail page separation.** The list and detail plugins must be placed on different
   pages. `settings.detailPid` on the list plugin drives the "Apply Now" link target.
   Without it, the list renders job cards with no navigation link.
+- **Pretty detail URLs.** Site route enhancer `MaiJobsDetail` maps `/{job}` to
+  `Job::detail` via `PersistedAliasMapper` on `tx_maijobs_job.slug`.
 - **Schema.org output is pending.** The `JobPosting` field mapping in section 10 is a
   specification contract. Until JSON-LD output is implemented in the template or a
   dedicated DataProcessor, the structured data is not emitted.

@@ -12,6 +12,9 @@
             <trans-unit id="tx_maijobs_job.title">
                 <source>Title</source>
             </trans-unit>
+            <trans-unit id="tx_maijobs_job.slug">
+                <source>Slug</source>
+            </trans-unit>
             <trans-unit id="tx_maijobs_job.description">
                 <source>Description</source>
             </trans-unit>
