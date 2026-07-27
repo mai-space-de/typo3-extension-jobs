@@ -7,17 +7,23 @@ namespace Maispace\MaiJobs\Upgrades;
 use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Expression\CompositeExpression;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\DataHandling\Model\RecordStateFactory;
 use TYPO3\CMS\Core\DataHandling\SlugHelper;
 use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Core\Upgrades\RepeatableInterface;
 use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Backfills empty tx_maijobs_job.slug values from the title field.
+ *
+ * Repeatable: shows up again whenever records with an empty slug exist
+ * (e.g. after imports or seed runs).
  */
-#[UpgradeWizard('maiJobsPopulateJobSlugUpgrade')]
-final readonly class PopulateJobSlugUpgrade implements UpgradeWizardInterface
+#[UpgradeWizard('maiJobsPopulateEmptyJobSlug')]
+final readonly class PopulateEmptyJobSlugUpgrade implements UpgradeWizardInterface, RepeatableInterface
 {
     private const string TABLE = 'tx_maijobs_job';
 
@@ -61,12 +67,7 @@ final readonly class PopulateJobSlugUpgrade implements UpgradeWizardInterface
         $rows = $queryBuilder
             ->select('*')
             ->from(self::TABLE)
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'slug',
-                    $queryBuilder->createNamedParameter('', Connection::PARAM_STR),
-                ),
-            )
+            ->where($this->emptySlugConstraint($queryBuilder))
             ->executeQuery()
             ->fetchAllAssociative();
 
@@ -81,6 +82,10 @@ final readonly class PopulateJobSlugUpgrade implements UpgradeWizardInterface
             }
 
             $proposal = $slugHelper->generate($row, $pid);
+            if ($proposal === '' || $proposal === '/') {
+                $proposal = 'job-' . $uid;
+            }
+
             $state = RecordStateFactory::forName(self::TABLE)->fromArray($row, $pid, $uid);
             $slug = $slugHelper->buildSlugForUniqueInSite($proposal, $state);
 
@@ -103,14 +108,20 @@ final readonly class PopulateJobSlugUpgrade implements UpgradeWizardInterface
         return (int) $queryBuilder
             ->count('*')
             ->from(self::TABLE)
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'slug',
-                    $queryBuilder->createNamedParameter('', Connection::PARAM_STR),
-                ),
-            )
+            ->where($this->emptySlugConstraint($queryBuilder))
             ->executeQuery()
             ->fetchOne();
+    }
+
+    private function emptySlugConstraint(QueryBuilder $queryBuilder): CompositeExpression
+    {
+        return $queryBuilder->expr()->or(
+            $queryBuilder->expr()->eq(
+                'slug',
+                $queryBuilder->createNamedParameter('', Connection::PARAM_STR),
+            ),
+            $queryBuilder->expr()->isNull('slug'),
+        );
     }
 
     private function createSlugHelper(): SlugHelper
