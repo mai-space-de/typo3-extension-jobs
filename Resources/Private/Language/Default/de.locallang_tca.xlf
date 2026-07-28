@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages"
+          date="2025-01-01T00:00:00Z" product-name="mai_jobs">
+        <header/>
+        <body>
+            <trans-unit id="table.tx_maijobs_job">
+                <source>Job Vacancy</source>
+                <target>Stellenangebot</target>
+            </trans-unit>
+            <trans-unit id="table.tx_maijobs_application">
+                <source>Application</source>
+                <target>Bewerbung</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.slug">
+                <source>Slug</source>
+                <target>Slug</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.description">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.requirements">
+                <source>Requirements</source>
+                <target>Anforderungen</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.deadline">
+                <source>Application Deadline</source>
+                <target>Bewerbungsfrist</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.status">
+                <source>Status</source>
+                <target>Status</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.status.open">
+                <source>Open</source>
+                <target>Offen</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.status.filled">
+                <source>Filled</source>
+                <target>Besetzt</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.status.closed">
+                <source>Closed</source>
+                <target>Geschlossen</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_job.categories">
+                <source>Categories</source>
+                <target>Kategorien</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.first_name">
+                <source>First Name</source>
+                <target>Vorname</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.last_name">
+                <source>Last Name</source>
+                <target>Nachname</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.email">
+                <source>Email Address</source>
+                <target>E-Mail-Adresse</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.message">
+                <source>Cover Letter</source>
+                <target>Anschreiben</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.cv">
+                <source>CV / Resume</source>
+                <target>Lebenslauf</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.cv.addFile">
+                <source>Add CV</source>
+                <target>Lebenslauf hinzufügen</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.status">
+                <source>Status</source>
+                <target>Status</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.status.pending">
+                <source>Pending</source>
+                <target>Ausstehend</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.status.reviewed">
+                <source>Reviewed</source>
+                <target>Geprüft</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.status.accepted">
+                <source>Accepted</source>
+                <target>Angenommen</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.status.rejected">
+                <source>Rejected</source>
+                <target>Abgelehnt</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.submitted_at">
+                <source>Submitted At</source>
+                <target>Eingereicht am</target>
+            </trans-unit>
+            <trans-unit id="tx_maijobs_application.job">
+                <source>Job Vacancy</source>
+                <target>Stellenangebot</target>
+            </trans-unit>
+            <trans-unit id="tab.meta">
+                <source>Meta</source>
+                <target>Meta</target>
+            </trans-unit>
+            <trans-unit id="tab.language">
+                <source>Language</source>
+                <target>Sprache</target>
+            </trans-unit>
+            <trans-unit id="tab.access">
+                <source>Access</source>
+                <target>Zugriff</target>
+            </trans-unit>
+            <trans-unit id="tab.workflow">
+                <source>Workflow</source>
+                <target>Workflow</target>
+            </trans-unit>
+            <trans-unit id="palette.name">
+                <source>Name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="ctype.jobs_list">
+                <source>Jobs: List</source>
+                <target>Jobs: Liste</target>
+            </trans-unit>
+            <trans-unit id="ctype.jobs_detail">
+                <source>Jobs: Detail</source>
+                <target>Jobs: Detail</target>
+            </trans-unit>
+            <trans-unit id="plugin.list.title">
+                <source>Jobs: List</source>
+                <target>Jobs: Liste</target>
+            </trans-unit>
+            <trans-unit id="plugin.detail.title">
+                <source>Jobs: Detail</source>
+                <target>Jobs: Detail</target>
+            </trans-unit>
+            <trans-unit id="flexform.sheet.general">
+                <source>General</source>
+                <target>Allgemein</target>
+            </trans-unit>
+            <trans-unit id="flexform.field.pages">
+                <source>Storage Pages</source>
+                <target>Speicherseiten</target>
+            </trans-unit>
+            <trans-unit id="flexform.field.categoryUids">
+                <source>Categories (Filter)</source>
+                <target>Kategorien (Filter)</target>
+            </trans-unit>
+            <trans-unit id="flexform.field.statusFilter">
+                <source>Status Filter</source>
+                <target>Status-Filter</target>
+            </trans-unit>
+            <trans-unit id="flexform.field.statusFilter.all">
+                <source>All Statuses</source>
+                <target>Alle Status</target>
+            </trans-unit>
+            <trans-unit id="flexform.field.detailPid">
+                <source>Detail Page</source>
+                <target>Detailseite</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
