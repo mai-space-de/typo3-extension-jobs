@@ -65,8 +65,8 @@ client-side filter.
 
 | CType | Plugin identifier | Controller | Action | Backend group |
 | --- | --- | --- | --- | --- |
-| `maispace_jobs_list` | `tx_maijobs_list` | `JobController` | `list` | `maispace_feature` |
-| `maispace_jobs_detail` | `tx_maijobs_detail` | `JobController` + `ApplicationController` | `detail`, `apply`, `confirm` | `maispace_feature` |
+| `maijobs_list` | `tx_maijobs_list` | `JobController` | `list` | `maispace_feature` |
+| `maijobs_detail` | `tx_maijobs_detail` | `JobController` + `ApplicationController` | `detail`, `apply`, `confirm` | `maispace_feature` |
 
 Both CTypes use the shared `mai-content` icon (registered by `mai_base`).
 
@@ -182,7 +182,7 @@ and renders the confirmation screen (`Application/Confirm.html`).
 
 ## 8. FlexForm Configuration
 
-FlexForm `JobsPlugin.xml` is attached to the `maispace_jobs_list` CType only.
+FlexForm `JobsPlugin.xml` is attached to the `maijobs_list` CType only.
 
 | Field | Type | Default | Notes |
 | --- | --- | --- | --- |
