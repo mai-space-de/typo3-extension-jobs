@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
+use TYPO3\CMS\Extbase\Attribute\RateLimit;
 use TYPO3\CMS\Extbase\Validation\Validator\ConjunctionValidator;
 
 class ApplicationController extends AbstractActionController
@@ -45,6 +46,7 @@ class ApplicationController extends AbstractActionController
         return $this->htmlResponse();
     }
 
+    #[RateLimit(limit: 3, interval: '1 hour')]
     public function confirmAction(Job $job, Application $application): ResponseInterface
     {
         $application->setJob($job);

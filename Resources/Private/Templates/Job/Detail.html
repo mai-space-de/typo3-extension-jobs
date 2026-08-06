@@ -22,13 +22,13 @@
 
         <f:if condition="{job.description}">
             <div class="mai-jobs-detail__description">
-                <f:format.html>{job.description}</f:format.html>
+                <f:render.text record="{job}" field="description" />
             </div>
         </f:if>
 
         <f:if condition="{job.requirements}">
             <div class="mai-jobs-detail__requirements">
-                <f:format.html>{job.requirements}</f:format.html>
+                <f:render.text record="{job}" field="requirements" />
             </div>
         </f:if>
 
