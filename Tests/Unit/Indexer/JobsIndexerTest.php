@@ -6,16 +6,45 @@ namespace Maispace\MaiJobs\Tests\Unit\Indexer;
 
 use Maispace\MaiJobs\Domain\Model\Job;
 use Maispace\MaiJobs\Indexer\JobsIndexer;
+use Maispace\MaiSearch\Domain\Service\SearchBackendInterface;
+use Maispace\MaiSearch\Service\BackendRegistry;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class JobsIndexerTest extends TestCase
 {
     private JobsIndexer $subject;
+    private BackendRegistry&MockObject $backendRegistry;
+    private SearchBackendInterface&MockObject $activeBackend;
 
     protected function setUp(): void
     {
         $this->subject = new JobsIndexer();
+
+        $this->activeBackend = $this->createMock(SearchBackendInterface::class);
+        $this->backendRegistry = $this->createMock(BackendRegistry::class);
+        $this->backendRegistry->method('getActive')->willReturn($this->activeBackend);
+        $this->subject->injectBackendRegistry($this->backendRegistry);
+    }
+
+    #[Test]
+    public function removeRecordDelegatesToActiveBackend(): void
+    {
+        $this->activeBackend
+            ->expects(self::once())
+            ->method('removeDocument')
+            ->with('jobs', 42);
+
+        $this->subject->removeRecord(42, 'tx_maijobs_job');
+    }
+
+    #[Test]
+    public function removeRecordIsNoOpForUnsupportedTable(): void
+    {
+        $this->activeBackend->expects(self::never())->method('removeDocument');
+
+        $this->subject->removeRecord(42, 'tx_mainews_news');
     }
 
     #[Test]
