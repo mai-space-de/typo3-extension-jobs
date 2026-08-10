@@ -84,6 +84,15 @@ class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterf
         return implode("\n", $parts);
     }
 
+    /**
+     * Extbase plugin namespace for the MaiJobs `Detail` plugin, matching the
+     * `MaiJobsDetail` route enhancer in config/sites/{site}/config.yaml (routePath
+     * '/{job}' → Job::detail, `job` aspect mapped via PersistedAliasMapper on
+     * tx_maijobs_job.slug). A bare `?uid=...` query parameter isn't inside
+     * that namespace, so no route enhancer ever recognises it.
+     */
+    private const string PLUGIN_NAMESPACE = 'tx_maijobs_detail';
+
     protected function buildUrl(object $record): string
     {
         if (!$record instanceof Job) {
@@ -91,10 +100,17 @@ class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterf
         }
 
         try {
-            $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId((int) $record->getPid());
+            $storagePid = (int) $record->getPid();
+            $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($storagePid);
             $uri = $site->getRouter()->generateUri(
-                (int) $record->getPid(),
-                ['uid' => $record->getUid()],
+                $this->resolvePluginTargetPageId($site, 'MaiJobs', 'Detail', $storagePid),
+                [
+                    self::PLUGIN_NAMESPACE => [
+                        'controller' => 'Job',
+                        'action' => 'detail',
+                        'job' => $record->getUid(),
+                    ],
+                ],
             );
 
             return (string) $uri;
