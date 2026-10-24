@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Maispace\MaiJobs\Indexer;
 
+use Maispace\MaiBase\Backend\CustomPageModule\DoktypeIds;
 use Maispace\MaiJobs\Domain\Model\Job;
 use Maispace\MaiSearch\Domain\Dto\SearchResult;
 use Maispace\MaiSearch\Domain\Model\IndexingContext;
@@ -15,9 +16,13 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
+/**
+ * Indexes Job doktype pages. Emits SiteRouter page URLs as the public URL.
+ * Accepts both Extbase Job models (full reindex) and stdClass page rows (queue).
+ */
 class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterface
 {
-    private const TABLE_NAME = 'tx_maijobs_job';
+    private const TABLE_NAME = 'pages';
 
     public function getType(): string
     {
@@ -43,17 +48,22 @@ class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterf
 
     public function indexRecord(object $record, IndexingContext $context): void
     {
-        if (!$record instanceof Job) {
+        $page = $this->normalizePageRecord($record);
+        if ($page === null) {
+            return;
+        }
+
+        if ((int) ($page->doktype ?? 0) !== DoktypeIds::JOB) {
             return;
         }
 
         $document = $this->createDocument(
             type: $this->getType(),
-            uid: (int) $record->getUid(),
-            title: $record->getTitle(),
-            content: $this->buildContent($record),
-            url: $this->buildUrl($record),
-            crdate: $this->resolveCrdate($record),
+            uid: (int) $page->uid,
+            title: (string) ($page->title ?? ''),
+            content: $this->buildContent($page),
+            url: $this->buildUrl($page),
+            crdate: $this->resolveDate($page),
             boost: $this->getBoost($this->getType()),
         );
 
@@ -71,51 +81,42 @@ class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterf
 
     protected function buildContent(object $record): string
     {
-        if (!$record instanceof Job) {
+        $page = $this->normalizePageRecord($record);
+        if ($page === null) {
             return '';
         }
 
-        $parts = [strip_tags($record->getDescription())];
-
-        if ($record->getRequirements() !== '') {
-            $parts[] = strip_tags($record->getRequirements());
-        }
+        $parts = array_filter([
+            strip_tags((string) ($page->tx_maijobs_description ?? $page->description ?? '')),
+            strip_tags((string) ($page->tx_maijobs_requirements ?? $page->requirements ?? '')),
+            $this->fetchPageContentText((int) $page->uid),
+        ]);
 
         return implode("\n", $parts);
     }
 
     /**
-     * Extbase plugin namespace for the MaiJobs `Detail` plugin, matching the
-     * `MaiJobsDetail` route enhancer in config/sites/{site}/config.yaml (routePath
-     * '/{job}' → Job::detail, `job` aspect mapped via PersistedAliasMapper on
-     * tx_maijobs_job.slug). A bare `?uid=...` query parameter isn't inside
-     * that namespace, so no route enhancer ever recognises it.
+     * Public URL = SiteRouter page UID (Job page is the detail target).
      */
-    private const string PLUGIN_NAMESPACE = 'tx_maijobs_detail';
-
     protected function buildUrl(object $record): string
     {
-        if (!$record instanceof Job) {
+        $page = $this->normalizePageRecord($record);
+        if ($page === null) {
+            return '';
+        }
+
+        $pageUid = (int) $page->uid;
+        if ($pageUid <= 0) {
             return '';
         }
 
         try {
-            $storagePid = (int) $record->getPid();
-            $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($storagePid);
-            $uri = $site->getRouter()->generateUri(
-                $this->resolvePluginTargetPageId($site, 'MaiJobs', 'Detail', $storagePid),
-                [
-                    self::PLUGIN_NAMESPACE => [
-                        'controller' => 'Job',
-                        'action' => 'detail',
-                        'job' => $record->getUid(),
-                    ],
-                ],
-            );
+            $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageUid);
+            $uri = $site->getRouter()->generateUri($pageUid);
 
             return (string) $uri;
-        } catch (\Exception) {
-            return '';
+        } catch (\Throwable) {
+            return (string) ($page->slug ?? '');
         }
     }
 
@@ -124,10 +125,22 @@ class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterf
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable(self::TABLE_NAME);
 
-        $queryBuilder->select('*')->from(self::TABLE_NAME);
+        $queryBuilder
+            ->select('*')
+            ->from(self::TABLE_NAME)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'doktype',
+                    $queryBuilder->createNamedParameter(DoktypeIds::JOB, Connection::PARAM_INT),
+                ),
+                $queryBuilder->expr()->eq(
+                    'deleted',
+                    $queryBuilder->createNamedParameter(0, Connection::PARAM_INT),
+                ),
+            );
 
         if ($context->languageUid !== null) {
-            $queryBuilder->where(
+            $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     'sys_language_uid',
                     $queryBuilder->createNamedParameter($context->languageUid, Connection::PARAM_INT),
@@ -168,6 +181,81 @@ class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterf
         return 'content-jobs';
     }
 
+    private function normalizePageRecord(object $record): ?\stdClass
+    {
+        if ($record instanceof Job) {
+            $obj = new \stdClass();
+            $obj->uid = (int) $record->getUid();
+            $obj->doktype = $record->getDoktype();
+            $obj->title = $record->getTitle();
+            $obj->slug = $record->getSlug();
+            $obj->tx_maijobs_description = $record->getDescription();
+            $obj->description = $record->getDescription();
+            $obj->tx_maijobs_requirements = $record->getRequirements();
+            $obj->requirements = $record->getRequirements();
+            $obj->tx_maijobs_deadline = $record->getDeadline();
+
+            return $obj;
+        }
+
+        if ($record instanceof \stdClass && isset($record->uid)) {
+            return $record;
+        }
+
+        return null;
+    }
+
+    private function resolveDate(\stdClass $page): \DateTime
+    {
+        $timestamp = (int) ($page->tx_maijobs_deadline ?? $page->tstamp ?? $page->crdate ?? 0);
+        if ($timestamp > 0) {
+            $dt = new \DateTime();
+            $dt->setTimestamp($timestamp);
+
+            return $dt;
+        }
+
+        return new \DateTime();
+    }
+
+    private function fetchPageContentText(int $pageUid): string
+    {
+        if ($pageUid <= 0) {
+            return '';
+        }
+
+        try {
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+                ->getQueryBuilderForTable('tt_content');
+
+            $rows = $queryBuilder
+                ->select('header', 'bodytext')
+                ->from('tt_content')
+                ->where(
+                    $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pageUid, Connection::PARAM_INT)),
+                    $queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
+                    $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
+                )
+                ->executeQuery()
+                ->fetchAllAssociative();
+        } catch (\Throwable) {
+            return '';
+        }
+
+        $parts = [];
+        foreach ($rows as $row) {
+            if (!empty($row['header'])) {
+                $parts[] = strip_tags((string) $row['header']);
+            }
+
+            if (!empty($row['bodytext'])) {
+                $parts[] = strip_tags((string) $row['bodytext']);
+            }
+        }
+
+        return implode(' ', $parts);
+    }
+
     private function buildSnippet(array $solrDoc): string
     {
         $content = $solrDoc['content_t'] ?? '';
@@ -186,14 +274,5 @@ class JobsIndexer extends AbstractIndexer implements SearchResultFormatterInterf
         } catch (\Exception) {
             return null;
         }
-    }
-
-    private function resolveCrdate(Job $record): \DateTime
-    {
-        if ($record->getDeadline() > 0) {
-            return (new \DateTime())->setTimestamp($record->getDeadline());
-        }
-
-        return new \DateTime();
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Maispace\MaiJobs\Tests\Unit\Hook;
 
+use Maispace\MaiBase\Backend\CustomPageModule\DoktypeIds;
 use Maispace\MaiJobs\Hook\JobCacheInvalidationHook;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,16 +25,32 @@ final class JobCacheInvalidationHookTest extends TestCase
     }
 
     #[Test]
-    public function jobRecordUpdateFlushesExtbaseCacheTagsTest(): void
+    public function legacyJobRecordUpdateDoesNotFlushCacheTest(): void
     {
-        $this->cacheService->expects(self::once())->method('clearCacheForRecord')->with('tx_maijobs_job', 21);
-        $this->cacheService->expects(self::once())->method('clearCachesOfRegisteredPageIds');
+        $this->cacheService->expects(self::never())->method('clearCacheForRecord');
+        $this->cacheService->expects(self::never())->method('clearCachesOfRegisteredPageIds');
 
         (new JobCacheInvalidationHook($this->cacheService))->processDatamap_afterDatabaseOperations(
             'update',
             'tx_maijobs_job',
             21,
             ['title' => 'Updated job'],
+            $this->dataHandler,
+        );
+    }
+
+    #[Test]
+    public function jobPageFieldUpdateFlushesExtbaseCacheTagsTest(): void
+    {
+        $this->dataHandler->checkValue_currentRecord = ['doktype' => DoktypeIds::JOB];
+        $this->cacheService->expects(self::once())->method('clearCacheForRecord')->with('pages', 42);
+        $this->cacheService->expects(self::once())->method('clearCachesOfRegisteredPageIds');
+
+        (new JobCacheInvalidationHook($this->cacheService))->processDatamap_afterDatabaseOperations(
+            'update',
+            'pages',
+            42,
+            ['doktype' => DoktypeIds::JOB, 'tx_maijobs_status' => 'open'],
             $this->dataHandler,
         );
     }

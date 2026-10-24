@@ -39,6 +39,15 @@
             <trans-unit id="tx_maijobs_job.categories">
                 <source>Categories</source>
             </trans-unit>
+            <trans-unit id="tx_maijobs_job.legacy_job_uid">
+                <source>Legacy job UID</source>
+            </trans-unit>
+            <trans-unit id="tab.job">
+                <source>Job</source>
+            </trans-unit>
+            <trans-unit id="palette.jobMeta">
+                <source>Status &amp; deadline</source>
+            </trans-unit>
             <trans-unit id="tx_maijobs_application.first_name">
                 <source>First Name</source>
             </trans-unit>
@@ -109,7 +118,7 @@
                 <source>General</source>
             </trans-unit>
             <trans-unit id="flexform.field.pages">
-                <source>Storage Pages</source>
+                <source>Parent pages (Job pages as children)</source>
             </trans-unit>
             <trans-unit id="flexform.field.categoryUids">
                 <source>Categories (Filter)</source>

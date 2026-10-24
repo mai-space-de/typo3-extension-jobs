@@ -7,6 +7,7 @@ namespace Maispace\MaiJobs\Controller;
 use Maispace\MaiBase\Controller\AbstractActionController;
 use Maispace\MaiBase\Controller\Traits\AppendDataToPluginVariablesTrait;
 use Maispace\MaiBase\Controller\Traits\PageRendererTrait;
+use Maispace\MaiJobs\Domain\Model\Application;
 use Maispace\MaiJobs\Domain\Model\Job;
 use Maispace\MaiJobs\Domain\Repository\JobRepository;
 use Psr\Http\Message\ResponseInterface;
@@ -14,8 +15,12 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
+/**
+ * List over Job doktype pages. Detail renders the current Job page (+ application form).
+ */
 class JobController extends AbstractActionController
 {
     use AppendDataToPluginVariablesTrait;
@@ -40,7 +45,7 @@ class JobController extends AbstractActionController
     {
         $settings = $this->getSettings();
 
-        $pageUids = $this->resolveStoragePageUids();
+        $pageUids = $this->resolveParentPageUids();
         $categoryUid = (int) ($settings['categoryUid'] ?? 0);
         $statusFilter = (string) ($settings['statusFilter'] ?? '');
 
@@ -76,7 +81,7 @@ class JobController extends AbstractActionController
     public function detailAction(?Job $job = null): ResponseInterface
     {
         if ($job === null) {
-            $job = $this->resolveFallbackJob();
+            $job = $this->resolveJobFromCurrentPage();
         }
 
         if ($job === null) {
@@ -86,40 +91,44 @@ class JobController extends AbstractActionController
 
         $this->view->assignMultiple([
             'job' => $job,
+            'application' => new Application(),
             'settings' => $this->getSettings(),
         ]);
 
         return $this->htmlResponse();
     }
 
-    private function resolveFallbackJob(): ?Job
+    private function resolveJobFromCurrentPage(): ?Job
     {
-        $pageUids = $this->resolveStoragePageUids();
-
-        if ($pageUids !== []) {
-            $jobs = $this->jobRepository->findFromPages($pageUids);
-        } else {
-            $jobs = $this->jobRepository->findAll();
+        $routing = $this->request->getAttribute('routing');
+        $pageUid = $routing instanceof PageArguments ? $routing->getPageId() : 0;
+        if ($pageUid <= 0) {
+            return null;
         }
 
-        $firstJob = $jobs->getFirst();
-
-        return $firstJob instanceof Job ? $firstJob : null;
+        return $this->jobRepository->findByUid($pageUid);
     }
 
-    private function resolveStoragePageUids(): array
+    /**
+     * @return list<int>
+     */
+    private function resolveParentPageUids(): array
     {
-        $pages = $this->settings['pages'] ?? '';
-        if (empty($pages)) {
+        $pages = trim((string) ($this->settings['pages'] ?? ''));
+        if ($pages === '') {
             return [];
         }
 
-        return array_filter(
-            array_map('intval', explode(',', (string) $pages)),
+        return array_values(array_filter(
+            array_map(static fn(string $uid): int => (int) $uid, explode(',', $pages)),
             static fn(int $uid): bool => $uid > 0,
-        );
+        ));
     }
 
+    /**
+     * @param array<string, mixed> $settings
+     * @return list<array{uid: int|string, title: string}>
+     */
     private function resolveCategories(array $settings): array
     {
         $categoryUids = $settings['categoryUids'] ?? '';

@@ -44,7 +44,11 @@
                             data-jobs-item="1"
                             data-jobs-categories="{f:for(each: job.categories, as: 'cat', iteration: 'i')}{cat.uid}{f:if(condition: i.isLast, else: ',')}{/f:for}"
                         >
-                            <h3 class="mai-jobs__title">{job.title}</h3>
+                            <h3 class="mai-jobs__title">
+                                <f:link.page pageUid="{job.uid}" class="mai-jobs__title-link">
+                                    {job.title}
+                                </f:link.page>
+                            </h3>
                             <div class="mai-jobs__meta">
                                 <span class="mai-jobs__status mai-jobs__status--{job.status}">
                                     <f:translate key="job.status.{job.status}" extensionName="mai_jobs"/>
@@ -56,19 +60,13 @@
                                     </span>
                                 </f:if>
                             </div>
-                            <f:if condition="{settings.detailPid}">
-                                <f:link.action
-                                    action="detail"
-                                    controller="Job"
-                                    extensionName="MaiJobs"
-                                    pluginName="Detail"
-                                    arguments="{job: job}"
-                                    pageUid="{settings.detailPid}"
-                                    class="mai-jobs__link"
-                                >
-                                    <f:translate key="job.apply" extensionName="mai_jobs"/>
-                                </f:link.action>
-                            </f:if>
+                            <f:link.page
+                                pageUid="{job.uid}"
+                                class="mai-jobs__link"
+                                additionalAttributes="{aria-label: '{f:translate(key: \'job.apply\', extensionName: \'mai_jobs\')} – {job.title}'}"
+                            >
+                                <f:translate key="job.apply" extensionName="mai_jobs"/>
+                            </f:link.page>
                         </article>
                     </f:for>
                 </f:then>

@@ -71,8 +71,11 @@ return (new Table($lang('table.tx_maijobs_application')))
         'job',
         $lang('tx_maijobs_application.job'),
         (new SelectSingleConfig())
-            ->setForeignTable('tx_maijobs_job')
-            ->setForeignTableWhere('ORDER BY tx_maijobs_job.title')
+            ->setForeignTable('pages')
+            ->setForeignTableWhere(
+                'AND {#pages}.{#doktype} = 122 AND {#pages}.{#sys_language_uid} = 0'
+                . ' AND {#pages}.{#deleted} = 0 ORDER BY {#pages}.{#title} ASC'
+            )
             ->setItems([['label' => '', 'value' => 0]])
             ->setMinItems(0)
             ->setMaxItems(1)

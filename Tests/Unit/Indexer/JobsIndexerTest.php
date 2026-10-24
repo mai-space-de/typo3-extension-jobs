@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Maispace\MaiJobs\Tests\Unit\Indexer;
 
+use Maispace\MaiBase\Backend\CustomPageModule\DoktypeIds;
 use Maispace\MaiJobs\Domain\Model\Job;
 use Maispace\MaiJobs\Indexer\JobsIndexer;
+use Maispace\MaiSearch\Domain\Model\IndexingContext;
 use Maispace\MaiSearch\Domain\Service\SearchBackendInterface;
 use Maispace\MaiSearch\Service\BackendRegistry;
 use PHPUnit\Framework\Attributes\Test;
@@ -36,7 +38,7 @@ final class JobsIndexerTest extends TestCase
             ->method('removeDocument')
             ->with('jobs', 42);
 
-        $this->subject->removeRecord(42, 'tx_maijobs_job');
+        $this->subject->removeRecord(42, 'pages');
     }
 
     #[Test]
@@ -44,7 +46,7 @@ final class JobsIndexerTest extends TestCase
     {
         $this->activeBackend->expects(self::never())->method('removeDocument');
 
-        $this->subject->removeRecord(42, 'tx_mainews_news');
+        $this->subject->removeRecord(42, 'tx_maijobs_job');
     }
 
     #[Test]
@@ -54,16 +56,16 @@ final class JobsIndexerTest extends TestCase
     }
 
     #[Test]
-    public function supportsJobsTable(): void
+    public function supportsPagesTable(): void
     {
-        self::assertTrue($this->subject->supports('tx_maijobs_job'));
+        self::assertTrue($this->subject->supports('pages'));
     }
 
     #[Test]
     public function doesNotSupportOtherTables(): void
     {
+        self::assertFalse($this->subject->supports('tx_maijobs_job'));
         self::assertFalse($this->subject->supports('tx_mainews_news'));
-        self::assertFalse($this->subject->supports('pages'));
         self::assertFalse($this->subject->supports('tt_content'));
     }
 
@@ -121,6 +123,42 @@ final class JobsIndexerTest extends TestCase
         $content = $this->invokeBuildContent(new \stdClass());
 
         self::assertSame('', $content);
+    }
+
+    #[Test]
+    public function indexRecordAcceptsStdClassJobPageFromQueue(): void
+    {
+        $page = new \stdClass();
+        $page->uid = 42;
+        $page->doktype = DoktypeIds::JOB;
+        $page->title = 'Queued Job';
+        $page->tx_maijobs_description = 'Description';
+        $page->tx_maijobs_deadline = 1700000000;
+        $page->slug = '/jobs/queued';
+
+        $this->activeBackend
+            ->expects(self::once())
+            ->method('indexDocument')
+            ->with(self::callback(static function (object $document): bool {
+                return $document->type === 'jobs'
+                    && $document->uid === 42
+                    && $document->title === 'Queued Job';
+            }));
+
+        $this->subject->indexRecord($page, new IndexingContext(core: 'core_de'));
+    }
+
+    #[Test]
+    public function indexRecordSkipsNonJobDoktypeStdClass(): void
+    {
+        $page = new \stdClass();
+        $page->uid = 7;
+        $page->doktype = 1;
+        $page->title = 'Standard';
+
+        $this->activeBackend->expects(self::never())->method('indexDocument');
+
+        $this->subject->indexRecord($page, new IndexingContext(core: 'core_de'));
     }
 
     #[Test]

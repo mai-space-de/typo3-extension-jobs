@@ -22,17 +22,17 @@
 
         <f:if condition="{job.description}">
             <div class="mai-jobs-detail__description">
-                <f:render.text record="{job}" field="description" />
+                <f:render.text record="{job}" field="tx_maijobs_description" />
             </div>
         </f:if>
 
         <f:if condition="{job.requirements}">
             <div class="mai-jobs-detail__requirements">
-                <f:render.text record="{job}" field="requirements" />
+                <f:render.text record="{job}" field="tx_maijobs_requirements" />
             </div>
         </f:if>
 
-        <f:if condition="{job.isOpen}">
+        <f:if condition="{job.status} == 'open'">
             <div class="mai-jobs-detail__apply">
                 <f:render section="ApplicationForm" arguments="{_all}"/>
             </div>

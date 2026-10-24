@@ -49,6 +49,21 @@ final class JobTest extends TestCase
     }
 
     #[Test]
+    public function defaultDoktypeIsZero(): void
+    {
+        $job = new Job();
+        self::assertSame(0, $job->getDoktype());
+    }
+
+    #[Test]
+    public function setDoktypeStoresTheValue(): void
+    {
+        $job = new Job();
+        $job->setDoktype(122);
+        self::assertSame(122, $job->getDoktype());
+    }
+
+    #[Test]
     public function constructorInitializesCategoriesAsObjectStorage(): void
     {
         $job = new Job();

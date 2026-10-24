@@ -21,6 +21,8 @@ class Job extends AbstractEntity
 
     protected string $status = 'open';
 
+    protected int $doktype = 0;
+
     /**
      * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
      */
@@ -94,6 +96,16 @@ class Job extends AbstractEntity
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    public function getDoktype(): int
+    {
+        return $this->doktype;
+    }
+
+    public function setDoktype(int $doktype): void
+    {
+        $this->doktype = $doktype;
     }
 
     public function isOpen(): bool
