@@ -18,7 +18,7 @@ return (new Table($lang('table.tx_maijobs_application')))
     ->setLabel('last_name')
     ->setAlternativeLabelFields('first_name, email')
     ->appendAlternativeLabelToLabel()
-    ->setIconFile('EXT:mai_base/Resources/Public/Icons/generic_table.svg')
+    ->setIconFile('EXT:mai_base/Resources/Public/Icons/all-icons/interface-file-clipboard-check--checkmark-edit-task-edition-checklist-check-success-clipboard-form--Streamline-Core.svg')
     ->setDefaultSorting('ORDER BY submitted_at DESC')
     ->addColumn(
         'first_name',

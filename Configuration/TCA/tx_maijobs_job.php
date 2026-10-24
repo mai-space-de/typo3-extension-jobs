@@ -17,7 +17,7 @@ return (new Table($lang('table.tx_maijobs_job')))
     ->setSearchFields('title,description')
     ->setDefaultConfig()
     ->setLabel('title')
-    ->setIconFile('EXT:mai_base/Resources/Public/Icons/generic_table.svg')
+    ->setIconFile('EXT:mai_base/Resources/Public/Icons/all-icons/shopping-bag-suitcase-1--product-business-briefcase--Streamline-Core.svg')
     ->setSortingField()
     ->addColumn(
         'title',

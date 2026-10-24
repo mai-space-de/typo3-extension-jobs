@@ -12,7 +12,7 @@ $lang = Helper::localLangHelperFactory('mai_jobs', 'Default/locallang_tca.xlf');
     'MaiJobs',
     'List',
     $lang('plugin.list.title'),
-    'mai-content',
+    'mai-jobs',
     'maispace_plugins_lists',
     '',
     'FILE:EXT:mai_jobs/Configuration/FlexForms/JobsPlugin.xml',
@@ -22,6 +22,6 @@ $lang = Helper::localLangHelperFactory('mai_jobs', 'Default/locallang_tca.xlf');
     'MaiJobs',
     'Detail',
     $lang('plugin.detail.title'),
-    'mai-content',
+    'mai-jobs',
     'maispace_plugins_lists',
 );
