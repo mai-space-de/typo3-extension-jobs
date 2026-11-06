@@ -23,3 +23,21 @@ services:
         priority: 10
         target: TYPO3\CMS\Extbase\Domain\Model\FileReference
         sources: TYPO3\CMS\Core\Http\UploadedFile, array
+
+  dashboard.widget.maiJobsManual:
+    class: 'ProudNerds\PnBackendManual\Widgets\ManualWidget'
+    arguments:
+      $options:
+        file: 'EXT:mai_jobs/Resources/Private/Manual/Manual.md'
+        numbered: true
+        contentsDepth: 2
+        printButton: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'maiJobsManual'
+        groupNames: 'documentation'
+        title: 'Handbuch: Stellen'
+        description: 'Kurze Anleitung für Stellenanzeigen und Bewerbungen.'
+        iconIdentifier: 'content-book'
+        height: 'medium'
+        width: 'medium'
