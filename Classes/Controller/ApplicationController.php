@@ -49,6 +49,12 @@ class ApplicationController extends AbstractActionController
     #[RateLimit(limit: 3, interval: '1 hour')]
     public function confirmAction(Job $job, Application $application): ResponseInterface
     {
+        if (!$this->isCaptchaValid()) {
+            $this->flashCaptchaError();
+
+            return $this->redirect('apply', null, null, ['job' => $job]);
+        }
+
         $application->setJob($job);
         $application->setSubmittedAt((int) $this->context->getPropertyFromAspect('date', 'timestamp'));
 
