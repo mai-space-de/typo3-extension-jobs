@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Maispace\MaiJobs\Domain\Model;
 
+use TYPO3\CMS\Extbase\Attribute\FileUpload;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -18,8 +19,24 @@ class Application extends AbstractEntity
     protected string $message = '';
 
     /**
+     * Optional CV. Extbase validates and stores the upload (TYPO3 file upload handling).
+     *
      * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>|null
      */
+    #[FileUpload(
+        validation: [
+            'required' => false,
+            'maxFiles' => 1,
+            'fileSize' => ['minimum' => '0K', 'maximum' => '5M'],
+            'allowedMimeTypes' => [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.oasis.opendocument.text',
+            ],
+        ],
+        uploadFolder: '1:/user_upload/job_applications/',
+    )]
     protected ?ObjectStorage $cv = null;
 
     protected string $status = 'pending';
